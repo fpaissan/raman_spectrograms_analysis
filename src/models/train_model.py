@@ -18,7 +18,7 @@ def main(feature_filepath):
     with ShadyBar(f"Loading dataset...", max=len(file_list)) as bar:
         for f in file_list:
             if not "bkg" in f:
-                data_x.append(load_data(f))
+                data_x.append(load_data(f, 0, -1))
             bar.next()
 
     data_x = np.array(data_x)
