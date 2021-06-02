@@ -30,7 +30,7 @@ def main(feature_filepath):
     k_mean = KMeans(n_clusters=63)
     k_mean.fit(data_x)
 
-    with open(f"models/k_means_range{r_start}{r_end}.pkl", 'wb') as f:
+    with open(f"models/k_means_range{r_start}-{r_end}.pkl", 'wb') as f:
         pickle.dump(k_mean, f)
 
 
