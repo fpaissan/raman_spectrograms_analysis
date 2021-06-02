@@ -4,11 +4,12 @@ raman_spectrogram_analysis
 Clustering and classification of Raman spectrograms.
 
 Notes:
-	- from the analysis performed in the eda notebooks it is clear that, in order to compare the labeled data with the samples we need to truncate samples at 1400 data point per spectrogram.
-	However, it makes sense to investigate how this impacts the clustering and inference. For this, after training both methods with limited and full range, I'll analyse inference results to
-	understand which data points changed and to try investigate the reasons for that.
+- from the analysis performed in the eda notebooks it is clear that, in order to compare the labeled data with the samples we need to truncate samples at 1400 data point per spectrogram. However, it makes sense to investigate how this impacts the clustering and inference. For this, after training both methods with limited and full range, I'll analyse inference results to understand which data points changed and to try investigate the reasons for that.
+- other analysis are commented in the notebook (n. of peaks, signal power, ...)
 	
-	- other analysis are commented in the notebook (n. of peaks, signal power, ...) 
+## On K-means
+- the number of clustered is inferred by the labels in the files, not best practise (are we sure all labels are present in the unlabeled files?);
+- not trivial to compare different spec length for clustering (are clusters ordered in the same way?)
 
 Project Organization
 ------------
