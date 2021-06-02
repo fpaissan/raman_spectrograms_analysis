@@ -18,7 +18,7 @@ def main(feature_filepath):
     r_start = 0
     r_end = 1400
 
-    # Check if 1D is ok
+    # TODO: Check if 1D is ok
     data_x = list()
     with ShadyBar(f"Loading dataset...", max=len(file_list)) as bar:
         for f in file_list:
@@ -27,7 +27,7 @@ def main(feature_filepath):
             bar.next()
 
     data_x = np.array(data_x)
-    k_mean = KMeans(n_clusters=63)
+    k_mean = KMeans(n_clusters=61)
     k_mean.fit(data_x)
 
     with open(f"models/k_means_range{r_start}-{r_end}.pkl", 'wb') as f:

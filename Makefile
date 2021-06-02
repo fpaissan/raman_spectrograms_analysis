@@ -27,10 +27,13 @@ requirements: test_environment
 
 ## Make Dataset
 data: requirements
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw/unlabeled data/processed/unlabeled
+	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw/ data/processed/
 
 train: requirements
 	$(PYTHON_INTERPRETER) src/models/train_model.py data/processed/unlabeled
+
+predict: requirements
+	$(PYTHON_INTERPRETER) src/models/predict_model.py models/k_means_range0-1400.pkl data/processed/labeled
 
 ## Delete all compiled Python files
 clean:
