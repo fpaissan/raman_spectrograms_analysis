@@ -13,7 +13,7 @@ import glob
 import os
 
 
-def find_peaks(input_filepath, output_filepath):
+def find_maxpeak_argmax(input_filepath, output_filepath):
     file_list = glob.glob(input_filepath + '/*')
     features_set = []
     with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
@@ -38,7 +38,7 @@ def main(features_path, output_filepath):
     logger.info('making final data set from raw data')
 
     for type in ['labeled', 'unlabeled']:
-        find_peaks(os.path.join(features_path, type), os.path.join(output_filepath, type))
+        find_maxpeak_argmax(os.path.join(features_path, type), os.path.join(output_filepath, type))
 
 
 if __name__ == '__main__':
