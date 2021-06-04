@@ -11,6 +11,7 @@ import click
 import glob
 import os
 
+
 def make_unlabeled(input_filepath, output_filepath):
     print(input_filepath, output_filepath)
     file_list = glob.glob(input_filepath + '/*')
@@ -26,6 +27,7 @@ def make_unlabeled(input_filepath, output_filepath):
                     os.path.join(output_filepath, f"{'_'.join(f.split('/')[-1].split('_')[:-1])}_{col}.csv"))
 
                 bar.next()
+
 
 def make_labeled(input_filepath, output_filepath):
     file_list = glob.glob(input_filepath + '/*')
