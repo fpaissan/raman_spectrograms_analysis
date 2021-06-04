@@ -26,10 +26,24 @@ def find_maxpeak_argmax(input_filepath, output_filepath):
     np.savetxt(os.path.join(output_filepath, "peaks_features.csv"), np.array(features_set))
 
 
+def find_maxpeak_2d(input_filepath, output_filepath):
+    file_list = glob.glob(input_filepath + '/*')
+    features_set = []
+    with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
+        for f in file_list:
+            interim_data = np.loadtxt(f, delimiter=',', skiprows=1)
+            features_set.append([np.argmax(interim_data[:, 1]), interim_data[np.argmax(interim_data[:, 1]), 1]])
+
+            bar.next()
+
+    np.savetxt(os.path.join(output_filepath, "peaks_features.csv"), np.array(features_set))
+
+
 @click.command()
 @click.argument('features_path', type=click.Path(exists=True))
 @click.argument('output_filepath', type=click.Path())
-def main(features_path, output_filepath):
+@click.argument('type_feature', type=str)
+def main(features_path, output_filepath, type_feature):
     """
         Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
@@ -37,8 +51,13 @@ def main(features_path, output_filepath):
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
 
+    feat_extractor = {
+        'maxpeak_argmax': find_maxpeak_argmax,
+        'maxpeak_2d': find_maxpeak_2d
+    }
+
     for type in ['labeled', 'unlabeled']:
-        find_maxpeak_argmax(os.path.join(features_path, type), os.path.join(output_filepath, type))
+        feat_extractor[type_feature](os.path.join(features_path, type), os.path.join(output_filepath, type))
 
 
 if __name__ == '__main__':
