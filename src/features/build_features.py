@@ -30,7 +30,8 @@ def find_peaks(input_filepath, output_filepath):
 @click.argument('features_path', type=click.Path(exists=True))
 @click.argument('output_filepath', type=click.Path())
 def main(features_path, output_filepath):
-    """ Runs data processing scripts to turn raw data from (../raw) into
+    """
+        Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
     """
     logger = logging.getLogger(__name__)

@@ -10,6 +10,16 @@ import glob
 from src.models.utils import load_data
 
 
+def train_model(data_x, n_clusters=8):
+    """
+    Finds k-means centroids
+    """
+    k_mean = KMeans(n_clusters=n_clusters)  # perche 61?
+    k_mean.fit(data_x)
+
+    return k_mean
+
+
 @click.command()
 @click.argument('feature_filepath', type=click.Path(exists=True))
 def main(feature_filepath):
@@ -19,18 +29,15 @@ def main(feature_filepath):
     r_end = 1400
 
     # TODO: Check if 1D is ok
-    data_x = list()
     with ShadyBar(f"Loading dataset...", max=len(file_list)) as bar:
         for f in file_list:
             if not "bkg" in f:
-                data_x.append(load_data(f, r_start, r_end))
+                data_x = load_data(f)
             bar.next()
 
-    data_x = np.array(data_x)
-    k_mean = KMeans(n_clusters=61)
-    k_mean.fit(data_x)
+    k_mean = train_model(data_x)
 
-    with open(f"models/k_means_range{r_start}-{r_end}.pkl", 'wb') as f:
+    with open(f"models/k_means_range.pkl", 'wb') as f:
         pickle.dump(k_mean, f)
 
 

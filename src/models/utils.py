@@ -2,5 +2,6 @@
 import numpy as np
 
 
-def load_data(path: str, range_start: int, range_end: int) -> np.ndarray:
-    return np.loadtxt(path, skiprows=1, delimiter=',')[range_start:range_end, 1]
+def load_data(path: str) -> np.ndarray:
+    """Loads features from HD"""
+    return np.loadtxt(path).reshape(-1, 1)
