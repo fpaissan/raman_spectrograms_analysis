@@ -60,7 +60,7 @@ def gen_n_peak(n_peaks, type):
                 interim_data = np.loadtxt(f, delimiter=',', skiprows=1)
                 y_axis_data = interim_data[:, 1]
 
-                indexes = find_peaks(y_axis_data)[0]
+                indexes = find_peaks(y_axis_data, distance=30)[0]
                 y_axis_peaks = y_axis_data[indexes]
 
                 n_peaks_x = y_axis_peaks.argsort()[::-1][:n_peaks]
@@ -80,7 +80,7 @@ def gen_n_peak(n_peaks, type):
                 interim_data = np.loadtxt(f, delimiter=',', skiprows=1)
                 y_axis_data = interim_data[:, 1]
 
-                indexes = find_peaks(y_axis_data)[0]
+                indexes = find_peaks(y_axis_data, distance=30)[0]
                 y_axis_peaks = y_axis_data[indexes]
 
                 n_peaks_x = y_axis_peaks.argsort()[::-1][:n_peaks]
@@ -118,7 +118,7 @@ def main(features_path, output_filepath, type_feature):
         'maxpeak_n_2d': gen_n_peak(5, "amp")
     }
 
-    for type in ['labeled', 'unlabeled']:
+    for type in ['unlabeled']:  # ['labeled', 'unlabeled']:
         feat_extractor[type_feature](os.path.join(features_path, type), os.path.join(output_filepath, type))
 
 
