@@ -28,7 +28,7 @@ requirements: test_environment
 ## Make Dataset
 data: requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw/ data/interim/
-	$(PYTHON_INTERPRETER) src/features/build_features.py data/interim/ data/processed/ maxpeak_2d
+	$(PYTHON_INTERPRETER) src/features/build_features.py data/interim/ data/processed/ maxpeak_n_argmax
 
 train: requirements
 	$(PYTHON_INTERPRETER) src/models/train_model.py data/processed/unlabeled
