@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
+from src.features.utils import save_feat_files
+
 from dotenv import find_dotenv, load_dotenv
 from scipy.signal import find_peaks
 from progress.bar import ShadyBar
@@ -50,8 +51,8 @@ def find_maxpeak_2d(input_filepath, output_filepath):
     np.savetxt(os.path.join(output_filepath, "peaks_features.csv"), np.array(features_set))
 
 
-def gen_n_peak(n_peaks):
-    def find_n_maxpeak(input_filepath, output_filepath):
+def gen_n_peak(n_peaks, type):
+    def find_n_maxpeak_argmax(input_filepath, output_filepath):
         file_list = glob.glob(input_filepath + '/*')
         features_set = []
         with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
@@ -71,7 +72,31 @@ def gen_n_peak(n_peaks):
 
         np.savetxt(os.path.join(output_filepath, "peaks_features.csv"), np.array(features_set))
 
-    return find_n_maxpeak
+    def find_n_maxpeak(input_filepath, output_filepath):
+        file_list = glob.glob(input_filepath + '/*')
+        features_set = np.ndarray(shape=(len(file_list), 2, n_peaks))
+        with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
+            for i, f in enumerate(file_list):
+                interim_data = np.loadtxt(f, delimiter=',', skiprows=1)
+                y_axis_data = interim_data[:, 1]
+
+                indexes = find_peaks(y_axis_data)[0]
+                y_axis_peaks = y_axis_data[indexes]
+
+                n_peaks_x = y_axis_peaks.argsort()[::-1][:n_peaks]
+                interim_data_indexes = indexes[n_peaks_x]
+
+                features_set[i, 0, :] = interim_data[interim_data_indexes, 0]
+                features_set[i, 1, :] = interim_data[interim_data_indexes, 1]
+
+                bar.next()
+
+        save_feat_files(features_set, os.path.join(output_filepath, "peaks_features.csv"))
+
+    if type == "argmax":
+        return find_n_maxpeak_argmax
+    elif type == "amp":
+        return find_n_maxpeak
 
 
 @click.command()
@@ -89,7 +114,8 @@ def main(features_path, output_filepath, type_feature):
     feat_extractor = {
         'maxpeak_argmax': find_maxpeak_argmax,
         'maxpeak_2d': find_maxpeak_2d,
-        'maxpeak_n_argmax': gen_n_peak(10)
+        'maxpeak_n_argmax': gen_n_peak(10, "argmax"),
+        'maxpeak_n_2d': gen_n_peak(5, "amp")
     }
 
     for type in ['labeled', 'unlabeled']:
