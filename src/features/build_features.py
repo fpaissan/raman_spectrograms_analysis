@@ -39,6 +39,35 @@ def find_maxpeak_2d(input_filepath, output_filepath):
     np.savetxt(os.path.join(output_filepath, "peaks_features.csv"), np.array(features_set))
 
 
+def find_maxpeak_2d(input_filepath, output_filepath):
+    file_list = glob.glob(input_filepath + '/*')
+    features_set = []
+    with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
+        for f in file_list:
+            interim_data = np.loadtxt(f, delimiter=',', skiprows=1)
+            features_set.append([np.argmax(interim_data[:, 1]), interim_data[np.argmax(interim_data[:, 1]), 1]])
+
+            bar.next()
+
+    np.savetxt(os.path.join(output_filepath, "peaks_features.csv"), np.array(features_set))
+
+
+def gen_n_peak(n_peaks):
+    def find_n_maxpeak(input_filepath, output_filepath):
+        file_list = glob.glob(input_filepath + '/*')
+        features_set = []
+        with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
+            for f in file_list:
+                interim_data = np.loadtxt(f, delimiter=',', skiprows=1)
+                features_set.append(np.argpartition(interim_data[:, 1], -n_peaks)[-n_peaks:])
+
+                bar.next()
+
+        np.savetxt(os.path.join(output_filepath, "peaks_features.csv"), np.array(features_set))
+
+    return find_n_maxpeak
+
+
 @click.command()
 @click.argument('features_path', type=click.Path(exists=True))
 @click.argument('output_filepath', type=click.Path())
@@ -53,7 +82,8 @@ def main(features_path, output_filepath, type_feature):
 
     feat_extractor = {
         'maxpeak_argmax': find_maxpeak_argmax,
-        'maxpeak_2d': find_maxpeak_2d
+        'maxpeak_2d': find_maxpeak_2d,
+        'maxpeak_n_argmax': gen_n_peak(5)
     }
 
     for type in ['labeled', 'unlabeled']:
