@@ -89,7 +89,7 @@ def main(features_path, output_filepath, type_feature):
     feat_extractor = {
         'maxpeak_argmax': find_maxpeak_argmax,
         'maxpeak_2d': find_maxpeak_2d,
-        'maxpeak_n_argmax': gen_n_peak(5)
+        'maxpeak_n_argmax': gen_n_peak(10)
     }
 
     for type in ['labeled', 'unlabeled']:
