@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
-
-from src.data.utils import read_data, normalize_col
-
 from dotenv import find_dotenv, load_dotenv
-from pathlib import Path
+from scipy.signal import find_peaks
 from progress.bar import ShadyBar
+from pathlib import Path
 import numpy as np
 import logging
 import click
@@ -59,7 +57,15 @@ def gen_n_peak(n_peaks):
         with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
             for f in file_list:
                 interim_data = np.loadtxt(f, delimiter=',', skiprows=1)
-                features_set.append(np.argpartition(interim_data[:, 1], -n_peaks)[-n_peaks:])
+                y_axis_data = interim_data[:, 1]
+
+                indexes = find_peaks(y_axis_data)[0]
+                y_axis_peaks = y_axis_data[indexes]
+
+                n_peaks_x = y_axis_peaks.argsort()[::-1][:n_peaks]
+                interim_data_indexes = indexes[n_peaks_x]
+
+                features_set.append(interim_data[interim_data_indexes, 0])
 
                 bar.next()
 
