@@ -22,7 +22,7 @@ def make_unlabeled(input_filepath, output_filepath):
 
         with ShadyBar(f"Processing file... {f}", max=len(data.columns)) as bar:
             for col in data:
-                norm_col = normalize_col(wl, data[col])
+                norm_col = normalize_col(wl, data[col], norm_type = "integral")
                 norm_col.to_csv(
                     os.path.join(output_filepath, f"{'_'.join(f.split('/')[-1].split('_')[:-1])}_{col}.csv"))
 
