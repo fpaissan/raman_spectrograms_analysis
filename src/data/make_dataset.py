@@ -12,8 +12,7 @@ import glob
 import os
 
 
-def make_unlabeled(input_filepath, output_filepath):
-    print(input_filepath, output_filepath)
+def make_unlabeled(input_filepath, output_filepath, norm_type="integral"):
     file_list = glob.glob(input_filepath + '/*')
     for f in file_list:
         df = read_data(f)
@@ -22,14 +21,14 @@ def make_unlabeled(input_filepath, output_filepath):
 
         with ShadyBar(f"Processing file... {f}", max=len(data.columns)) as bar:
             for col in data:
-                norm_col = normalize_col(wl, data[col], norm_type = "integral")
+                norm_col = normalize_col(wl, data[col], norm_type="integral")
                 norm_col.to_csv(
                     os.path.join(output_filepath, f"{'_'.join(f.split('/')[-1].split('_')[:-1])}_{col}.csv"))
 
                 bar.next()
 
 
-def make_labeled(input_filepath, output_filepath):
+def make_labeled(input_filepath, output_filepath, norm_type="integral"):
     file_list = glob.glob(input_filepath + '/*')
     with ShadyBar(f"Processing labeled files...", max=len(file_list)) as bar:
         for f in file_list:
@@ -38,7 +37,7 @@ def make_labeled(input_filepath, output_filepath):
             data = df.drop(columns=['wl'])
 
             for col in data:
-                norm_col = normalize_col(wl, data[col])
+                norm_col = normalize_col(wl, data[col], norm_type="integral")
                 norm_col.to_csv(
                     os.path.join(output_filepath, f"{f.split('/')[-1].split('.')[0]}.csv"))
 
