@@ -39,7 +39,7 @@ def make_labeled(input_filepath, output_filepath, norm_type="integral"):
             for col in data:
                 norm_col = normalize_col(wl, data[col], norm_type=norm_type)
                 norm_col.to_csv(
-                    os.path.join(output_filepath, f"{f.split('/')[-1].split('.')[0]}.csv"))
+                    os.path.join(output_filepath, f"{f.split('/')[-1]}.csv"))
 
             bar.next()
 
