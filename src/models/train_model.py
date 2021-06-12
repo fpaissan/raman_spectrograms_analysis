@@ -40,6 +40,8 @@ def main(feature_filepath):
     with open(f"models/k_means_range.pkl", 'wb') as f:
         pickle.dump(k_mean, f)
 
+    return k_mean
+
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
