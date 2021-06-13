@@ -1,8 +1,8 @@
 # Written by Francesco Paissan
-from src.models.train_model import train_model
 from src.features.utils import load_features
 import src.visualization.vis_func as vf
 
+import matplotlib.pyplot as plt
 import logging
 import click
 import os
@@ -20,8 +20,16 @@ def main(features_filepath):
         y_pred = model.predict(data_x)
 
         vf.proportion_per_cluster(data_x, y_pred, type)
+        plt.close()
         if type == 'unlabeled':
             vf.cluster_vis(f"data/interim/{type}", y_pred)
+            plt.close()
+
+            S1_pred = y_pred[:121]
+            S2_pred = y_pred[121:]
+
+            vf.proportion_per_cluster(data_x[:121], S1_pred, "S1")
+            vf.proportion_per_cluster(data_x[121:], S2_pred, "S2")
 
 
 if __name__ == '__main__':
