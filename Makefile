@@ -22,16 +22,16 @@ endif
 
 ## Install Python Dependencies
 requirements: test_environment
-	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel --user
-	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt --user
+	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
+	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
 ## Make Dataset
 data: requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw/ data/interim/
-	$(PYTHON_INTERPRETER) src/features/build_features.py data/interim/ data/processed/ maxpeak_n_2d
+	$(PYTHON_INTERPRETER) src/features/build_features.py data/interim/ data/processed/ eng
 
 train: requirements
-	$(PYTHON_INTERPRETER) src/models/train_model.py data/processed/unlabeled
+	$(PYTHON_INTERPRETER) src/models/train_model.py data/processed/unlabeled 2-norm
 
 predict: requirements
 	$(PYTHON_INTERPRETER) src/models/predict_model.py models/k_means_range0-1400.pkl data/processed/labeled

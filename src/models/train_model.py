@@ -9,7 +9,7 @@ import click
 import glob
 
 
-def train_model(data_x, metric, n_clusters=60):
+def train_model(data_x, metric, n_clusters=61):
     """ Train model_type on data_x using metric. """
     metrics_lambdas = {
         "1-norm": lambda x, y: np.linalg.norm(x - y, ord=1),
@@ -18,10 +18,9 @@ def train_model(data_x, metric, n_clusters=60):
         "correlation": lambda x, y: correlation(x, y),
     }
 
-    k_mean = KMedoids(n_clusters=n_clusters, metric=metrics_lambdas[metric])
-    k_mean.fit(data_x)
+    model = KMedoids(n_clusters=n_clusters, metric=metrics_lambdas[metric]).fit(data_x)
 
-    return k_mean
+    return model
 
 
 @click.command()
@@ -37,12 +36,14 @@ def main(feature_filepath, metric):
 
             bar.next()
 
-    k_mean = train_model(data_x, metric)
+    model = train_model(data_x, metric, n_clusters=61)
 
-    with open(f"models/trained_model.pkl", 'wb') as f:
-        pickle.dump(k_mean, f)
+    print(f"Model inertia on 61 clusters: {model.inertia_}")
 
-    return k_mean
+    # with open(f"models/trained_model.pkl", 'wb') as f:
+    #     pickle.dump(model, f)
+
+    return model
 
 
 if __name__ == '__main__':
