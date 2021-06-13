@@ -58,4 +58,4 @@ def extract_features(input_filepath: str, output_filepath: str):
     for i in range(7):
         zscore_feats[:, i] = zscore(features_set[:, i])
 
-    save_feat_files(features_set, os.path.join(output_filepath, "peaks_features.csv"))
+    save_feat_files(zscore_feats, os.path.join(output_filepath, "peaks_features.csv"))
