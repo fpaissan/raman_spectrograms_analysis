@@ -1,41 +1,22 @@
-import glob
-import logging
-import pickle
-
-import click
+#Written by Francesco Paissan
+from src.models.train_model import train_model
+from src.features.utils import load_features
 import numpy as np
-from progress.bar import ShadyBar
-
-from src.models.utils import load_data
+import logging
+import click
+import os
 
 
 @click.command()
-@click.argument('model_filepath', type=click.Path(exists=True))
 @click.argument('features_filepath', type=click.Path(exists=True))
-def main(model_filepath, features_filepath):
-    file_list = glob.glob('{0}/*'.format(features_filepath))
+def main(features_filepath):
+    for type in ['unlabeled', 'labeled']:
+        data_x = load_features(os.path.join(features_filepath, type))
+        model = train_model(data_x, "2-norm", n_clusters=61)
 
-    r_start = 0
-    r_end = 1400
+        y_pred = model.predict(data_x)
 
-    model = pickle.load(open(model_filepath, 'rb'))
-    # logging.log("Model loaded", logging.INFO)
-
-    # TODO: Check if 1D is ok
-    data_x = list()
-    data_y = list()
-    with ShadyBar(f"Loading dataset...", max=len(file_list)) as bar:
-        for f in file_list:
-            # print(load_data(f, r_start, r_end).shape, f.split('/')[-1].split('.')[0])
-            data_x.append(load_data(f, r_start, r_end))
-            data_y.append(f.split('/')[-1].split('.')[0])
-            bar.next()
-
-    data_x = np.array(data_x)
-    print(data_x.shape)
-    y_pred = model.predict(data_x)
-
-    print(len(np.unique(y_pred)))
+        print(f"In the {type} samples there are {len(np.unique(y_pred))} unique labeles")
 
 
 if __name__ == '__main__':

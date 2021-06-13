@@ -34,7 +34,7 @@ train: requirements
 	$(PYTHON_INTERPRETER) src/models/train_model.py data/processed/unlabeled 2-norm
 
 predict: requirements
-	$(PYTHON_INTERPRETER) src/models/predict_model.py models/k_means_range0-1400.pkl data/processed/labeled
+	$(PYTHON_INTERPRETER) src/models/predict_model.py data/processed
 
 ## Delete all compiled Python files
 clean:

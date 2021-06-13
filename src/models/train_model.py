@@ -8,6 +8,8 @@ import pickle
 import click
 import glob
 
+from src.features.utils import load_features
+
 
 def train_model(data_x, metric, n_clusters=61):
     """ Train model_type on data_x using metric. """
@@ -27,14 +29,7 @@ def train_model(data_x, metric, n_clusters=61):
 @click.argument('feature_filepath', type=click.Path(exists=True))
 @click.argument('metric', type=str)
 def main(feature_filepath, metric):
-    file_list = glob.glob('{0}/*'.format(feature_filepath))
-
-    with ShadyBar(f"Loading dataset...", max=len(file_list)) as bar:
-        for f in file_list:
-            with open(f, "rb") as f:
-                data_x = pickle.load(f)
-
-            bar.next()
+    data_x = load_features(feature_filepath)
 
     model = train_model(data_x, metric, n_clusters=61)
 
