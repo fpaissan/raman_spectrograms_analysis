@@ -4,7 +4,7 @@ import numpy as np
 import glob
 
 
-def proportion_per_cluster(data_x: np.array, y_pred: np.array):
+def proportion_per_cluster(data_x: np.array, y_pred: np.array, type: str):
     """ Plots the proportion for each cluster. """
     material_proportion = []
     for cluster in np.unique(y_pred):
@@ -12,12 +12,12 @@ def proportion_per_cluster(data_x: np.array, y_pred: np.array):
 
         material_proportion.append(len(cluster_samples))
 
-    plt.bar(x=[f'C{i + 1}' for i in range(61)],
+    plt.bar(x=[f'C{i + 1}' for i in range(len(np.unique(y_pred)))],
             height=list(map(lambda x: x / sum(material_proportion), material_proportion)))
     plt.title("Proporzione di sample per cluster")
     plt.xticks(rotation='vertical')
 
-    plt.show()
+    plt.savefig(f"reports/figures/proportions_{type}.pdf")
 
 
 def compress(data, mask):
@@ -44,5 +44,5 @@ def cluster_vis(interim_path: str, y_pred: np.array):
             plt.xlabel("cm^{-1}")
             plt.ylabel("Raman Intensity")
 
-        plt.savefig(f"reports/figures/cluster{cluster+1}_vis.pdf")
+        plt.savefig(f"reports/figures/cluster{cluster + 1}_vis.pdf")
         plt.close()

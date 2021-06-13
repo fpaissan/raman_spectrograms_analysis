@@ -1,4 +1,4 @@
-#Written by Francesco Paissan
+# Written by Francesco Paissan
 from src.models.train_model import train_model
 from src.features.utils import load_features
 import numpy as np
@@ -6,14 +6,16 @@ import logging
 import click
 import os
 
+from src.models.utils import load_model
+
 
 @click.command()
 @click.argument('features_filepath', type=click.Path(exists=True))
 def main(features_filepath):
+    model = load_model()
+
     for type in ['unlabeled', 'labeled']:
         data_x = load_features(os.path.join(features_filepath, type))
-        model = train_model(data_x, "2-norm", n_clusters=61)
-
         y_pred = model.predict(data_x)
 
         print(f"In the {type} samples there are {len(np.unique(y_pred))} unique labeles")
