@@ -42,6 +42,7 @@ def extract_features(input_filepath: str, output_filepath: str):
     Builds features for clustering.
     """
     file_list = glob.glob(input_filepath + '/*')
+    file_list.sort()
     features_set = np.ndarray(shape=(len(file_list), 7))
     with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
         for i, f in enumerate(file_list):

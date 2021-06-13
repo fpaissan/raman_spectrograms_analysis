@@ -10,6 +10,7 @@ import os
 
 def find_maxpeak_argmax(input_filepath, output_filepath):
     file_list = glob.glob(input_filepath + '/*')
+    file_list.sort()
     features_set = []
     with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
         for f in file_list:
@@ -23,6 +24,7 @@ def find_maxpeak_argmax(input_filepath, output_filepath):
 
 def find_maxpeak_2d(input_filepath, output_filepath):
     file_list = glob.glob(input_filepath + '/*')
+    file_list.sort()
     features_set = []
     with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
         for f in file_list:
@@ -36,6 +38,7 @@ def find_maxpeak_2d(input_filepath, output_filepath):
 
 def find_maxpeak_2d(input_filepath, output_filepath):
     file_list = glob.glob(input_filepath + '/*')
+    file_list.sort()
     features_set = []
     with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
         for f in file_list:
@@ -50,6 +53,7 @@ def find_maxpeak_2d(input_filepath, output_filepath):
 def gen_n_peak(n_peaks, type):
     def find_n_maxpeak_argmax(input_filepath, output_filepath):
         file_list = glob.glob(input_filepath + '/*')
+        file_list.sort()
         features_set = []
         with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
             for f in file_list:
@@ -70,6 +74,7 @@ def gen_n_peak(n_peaks, type):
 
     def find_n_maxpeak(input_filepath, output_filepath):
         file_list = glob.glob(input_filepath + '/*')
+        file_list.sort()
         features_set = np.ndarray(shape=(len(file_list), 2, n_peaks))
         with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
             for i, f in enumerate(file_list):
