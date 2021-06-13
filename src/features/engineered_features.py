@@ -4,6 +4,7 @@ from src.features.utils import save_feat_files
 from scipy.signal import find_peaks
 from progress.bar import ShadyBar
 from scipy.stats import entropy
+from scipy.stats import zscore
 import pandas as pd
 import numpy as np
 import glob
@@ -51,5 +52,10 @@ def extract_features(input_filepath: str, output_filepath: str):
             features_set[i, :] = list(stat_features(pd.DataFrame({"data": y_axis_data}), col_name="data").values())
 
             bar.next()
+
+    zscore_feats = np.ndarray(shape=features_set.shape)
+
+    for i in range(7):
+        zscore_feats[:, i] = zscore(features_set[:, i])
 
     save_feat_files(features_set, os.path.join(output_filepath, "peaks_features.csv"))
