@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.features.peak_features import find_maxpeak_argmax, find_maxpeak_2d, gen_n_peak
+from src.features.engineered_features import extract_features
 
 from dotenv import find_dotenv, load_dotenv
 from pathlib import Path
@@ -24,10 +25,11 @@ def main(features_path, output_filepath, type_feature):
         'maxpeak_argmax': find_maxpeak_argmax,
         'maxpeak_2d': find_maxpeak_2d,
         'maxpeak_n_argmax': gen_n_peak(10, "argmax"),
-        'maxpeak_n_2d': gen_n_peak(5, "amp")
+        'maxpeak_n_2d': gen_n_peak(5, "amp"),
+        'eng': extract_features
     }
 
-    for type in ['unlabeled']:  # ['labeled', 'unlabeled']:
+    for type in ['labeled', 'unlabeled']:
         feat_extractor[type_feature](os.path.join(features_path, type), os.path.join(output_filepath, type))
 
 
