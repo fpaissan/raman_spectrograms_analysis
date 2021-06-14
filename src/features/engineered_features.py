@@ -12,7 +12,6 @@ import os
 
 
 def stat_features(df, col_name):
-    """ Extracting engineered features """
     # First-order stats
     var = df[col_name].std()
     mean = df[col_name].mean()
@@ -34,6 +33,9 @@ def stat_features(df, col_name):
         "entropy": signal_entropy,
         "n-peaks": n_peaks,
         "zero-cross": zero_crossings,
+        "max_height": np.max(df[col_name]),
+        "argmax_height": df.wl[np.argmax(df[col_name])],
+        "integral": np.trapz(df[col_name], x=df.wl)
     }
 
 
@@ -43,14 +45,15 @@ def extract_features(input_filepath: str, output_filepath: str):
     """
     file_list = glob.glob(input_filepath + '/*')
     file_list.sort()
-    features_set = np.ndarray(shape=(len(file_list), 7))
+    features_set = np.ndarray(shape=(len(file_list), 10))
     with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
         for i, f in enumerate(file_list):
             interim_data = np.loadtxt(f, delimiter=',', skiprows=1)
 
             y_axis_data = interim_data[:, 1]
 
-            features_set[i, :] = list(stat_features(pd.DataFrame({"data": y_axis_data}), col_name="data").values())
+            features_set[i, :] = list(
+                stat_features(pd.DataFrame({"wl": interim_data[:, 0], "data": y_axis_data}), col_name="data").values())
 
             bar.next()
 
