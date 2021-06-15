@@ -12,15 +12,9 @@ On a second thought I wanted to investigate the number and position of peaks, a 
 - highest peak [position on the x axis](notebooks/fp-model-with-peak1-argmax.ipynb) and [position on the x axis with height](notebooks/fp-model-with-maxpeak2d.ipynb);
 - same analysis for 5 peaks \[[argmax](notebooks/fp-model-5-maxpeak-argmax.ipynb)\] \[[argmax + height](notebooks/fp-model-5-maxpeak-2d.ipynb)\] and 10 peaks \[[argmax](notebooks/fp-model-10-maxpeak-argmax.ipynb)\];
 
-Despite this seemed to be a good fit for the type of data to be processed, the elbow analysis on the clustering inertia was suggesting that the number of distinct clusters to classify was at max around 10, thus the feature set was not enough to represent the data for our purpose.
+After some experimentations and a bit of research I referred to the field of audio signal analysis and in particular to the paper ["Classification of audio signals using statistical features on time and wavelet transform domains." by Lambrou et al.](references/papers/ic982120.pdf) to create a set of meaningul scalar features that could represent the Raman spectrograms for clustering purposes. Results for this are shown [here](notebooks/fp-k-medoids-analysis-unlabeled.ipynb) (also different metrics were compared).
 
-After some experimentations and a bit of research I referred to the field of audio signal analysis and in particular to the paper ["Classification of audio signals using statistical features on time and wavelet transform domains." by Lambrou et al.](references/papers/ic982120.pdf) to create a set of meaningul scalar features that could represent the Raman spectrograms for clustering purposes.
-This achieved a good representative power and was performing well enough to be presented in this report. In fact, *inference results*
-
-**NB** the number of clusters from the unlabeled samples clustering gave results which are different from what I was expecting, probably due to the fact that not all of the materials listed with names are actually present in the acquisitions S1, S2.
-
-In order to associate labels to different clusters, I took the argmin with respect to all clusters in the list.
-Despite this not be the results I expected (there is not a 1 to 1 correspondance between clusters and labeled samples), the results are reported for the sake of evaluation.
+For a visual inspection of clustered spectrograms, look at plots under reports/figures/.
 
 ### Important notes
 From the EDA notebooks [1](notebooks/fp-eda-S1-raman-data.ipynb) [2](notebooks/fp-eda-S2-raman-data.ipynb) [3](notebooks/README-consegne.pynb), I noticed a big gap in integral values between labeled and unlabeled samples (which is experimentally related to the duration of the acquisition), thus I decided to normalise the area under the spectrogram in order to achieve comparable feature sets.
