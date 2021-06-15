@@ -17,6 +17,15 @@ HAS_CONDA=True
 endif
 
 #################################################################################
+# ALG SETUP                                                                     #
+#################################################################################
+
+FEATURE_SET = fit
+
+MODEL_TYPE = means	# medoids for k-medoids
+METRIC = 2-norm	# metric for k-medoids between 2-norm, 1-norm, cosine distance, correlation
+
+#################################################################################
 # COMMANDS                                                                      #
 #################################################################################
 
@@ -28,13 +37,13 @@ requirements: test_environment
 ## Make Dataset
 data: requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw/ data/interim/
-	$(PYTHON_INTERPRETER) src/features/build_features.py data/interim/ data/processed/ eng
+	$(PYTHON_INTERPRETER) src/features/build_features.py data/interim/ data/processed/ $(FEATURE_SET)
 
 train: requirements
-	$(PYTHON_INTERPRETER) src/models/train_model.py data/processed/unlabeled cosine
+	$(PYTHON_INTERPRETER) src/models/train_model.py data/processed/unlabeled $(MODEL_TYPE) $(METRIC)
 
 predict: requirements
-	$(PYTHON_INTERPRETER) src/models/predict_model.py data/processed
+	$(PYTHON_INTERPRETER) src/models/predict_model.py data/processed $(MODEL_TYPE)
 
 visualization: requirements
 	$(PYTHON_INTERPRETER) src/visualization/visualize.py data/processed/

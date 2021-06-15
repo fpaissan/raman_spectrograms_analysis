@@ -29,16 +29,18 @@ def train_model(data_x: str, metric: callable, n_clusters=61, model_type="medoid
 
 @click.command()
 @click.argument('feature_filepath', type=click.Path(exists=True))
+@click.argument('model_type',  type=str)
 @click.argument('metric', type=str)
-def main(feature_filepath, metric):
+def main(feature_filepath, model_type, metric):
     data_x = load_features(feature_filepath)
 
-    model = train_model(data_x, metric, n_clusters=61, model_type="means")
+    model = train_model(data_x, metric, n_clusters=61, model_type=model_type)
 
     print(f"Model inertia on 61 clusters: {model.inertia_}")
 
-    # with open(f"models/trained_model.pkl", 'wb') as f:
-    #     pickle.dump(model, f)
+    if model_type == "means":
+        with open(f"models/trained_model.pkl", 'wb') as f:
+            pickle.dump(model, f)
 
     return model
 
