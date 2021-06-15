@@ -3,7 +3,10 @@ raman_spectrogram_analysis
 
 Clustering and classification of Raman spectrograms.
 
-My initial idea was to perform the analysis directly on the normalised spectrograms. This turned out to be not feasible due to the different sample length (k-means dooesn't support different input shapes);
+My initial idea was to perform the analysis directly on the normalised spectrograms. This turned out to be not feasible due to the different sample length (k-means dooesn't support different input shapes); To deal with this problem, I used polynomial and linear interpolation to normalize the dimensionality of the data. In fact, I fitted a *n*-order polynomial to the data and clustered the samples based on the mapping of the range $`[0, 2400]`$ through the polynomial.
+
+The results for this clustering are shown in the plot below:
+*clustering results*
 
 On a second thought I wanted to investigate the number and position of peaks, a meaningul feature when it comes to spectrogram analysis. I tried two different approaches for this:
 - highest peak [position on the x axis](notebooks/fp-model-with-peak1-argmax.ipynb) and [position on the x axis with height](notebooks/fp-model-with-maxpeak2d.ipynb);
@@ -14,14 +17,13 @@ Despite this seemed to be a good fit for the type of data to be processed, the e
 After some experimentations and a bit of research I referred to the field of audio signal analysis and in particular to the paper ["Classification of audio signals using statistical features on time and wavelet transform domains." by Lambrou et al.](references/papers/ic982120.pdf) to create a set of meaningul scalar features that could represent the Raman spectrograms for clustering purposes.
 This achieved a good representative power and was performing well enough to be presented in this report. In fact, *inference results*
 
-Another approach I used to normalize the dimensionality of the data is polynomial interpolation. Thus, I fiitted a *n*-order polynomial to the data and clustered the samples based on the set of coefficient for each polynomial. The results for this analysis are shown in the table below:
-*inference results*
+**NB** the number of clusters from the unlabeled samples clustering gave results which are different from what I was expecting, probably due to the fact that not all of the materials listed with names are actually present in the acquisitions S1, S2.
 
-In order to associate labels to different clusters, I run the predictions on the labeled set and associated the labels corresponding to the particular cluster.
+In order to associate labels to different clusters, I took the argmin with respect to all clusters in the list.
 Despite this not be the results I expected (there is not a 1 to 1 correspondance between clusters and labeled samples), the results are reported for the sake of evaluation.
 
 ### Important notes
-From the EDA notebooks [1](notebooks/fp-eda-S1-raman-data.ipynb) [2](notebooks/fp-eda-S2-raman-data.ipynb) [3](notebooks/README-consegne.pynb), I noticed a big gap in integral values between labeled and unlabeled samples (which would have a big impact at inference time), thus I decided to normalise the area under the spectrogram in order to achieve comparable feature sets.
+From the EDA notebooks [1](notebooks/fp-eda-S1-raman-data.ipynb) [2](notebooks/fp-eda-S2-raman-data.ipynb) [3](notebooks/README-consegne.pynb), I noticed a big gap in integral values between labeled and unlabeled samples (which is experimentally related to the duration of the acquisition), thus I decided to normalise the area under the spectrogram in order to achieve comparable feature sets.
 
 ## How to use the repo
 
