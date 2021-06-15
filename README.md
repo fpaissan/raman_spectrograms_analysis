@@ -3,13 +3,48 @@ raman_spectrogram_analysis
 
 Clustering and classification of Raman spectrograms.
 
-Notes:
-- from the analysis performed in the eda notebooks it is clear that, in order to compare the labeled data with the samples we need to truncate samples at 1400 data point per spectrogram. However, it makes sense to investigate how this impacts the clustering and inference. For this, after training both methods with limited and full range, I'll analyse inference results to understand which data points changed and to try investigate the reasons for that.
-- other analysis are commented in the notebook (n. of peaks, signal power, ...)
-	
-## On K-means
-- the number of clustered is inferred by the labels in the files, not best practise (are we sure all labels are present in the unlabeled files?);
-- not trivial to compare different spec length for clustering (are clusters ordered in the same way?)
+My initial idea was to perform the analysis directly on the normalised spectrograms. This turned out to be not feasible due to the different sample length (k-means dooesn't support different input shapes);
+
+On a second thought I wanted to investigate the number and position of peaks, a meaningul feature when it comes to spectrogram analysis. I tried two different approaches for this:
+- highest peak [position on the x axis](notebooks/fp-model-with-peak1-argmax.ipynb) and [position on the x axis with height](notebooks/fp-model-with-maxpeak2d.ipynb);
+- same analysis for 5 peaks \[[argmax](notebooks/fp-model-5-maxpeak-argmax.ipynb)\] \[[argmax + height](notebooks/fp-model-5-maxpeak-2d.ipynb)\] and 10 peaks \[[argmax](notebooks/fp-model-10-maxpeak-argmax.ipynb)\];
+
+Despite this seemed to be a good fit for the type of data to be processed, the elbow analysis on the clustering inertia was suggesting that the number of distinct clusters to classify was at max around 10, thus the feature set was not enough to represent the data for our purpose.
+
+After some experimentations and a bit of research I referred to the field of audio signal analysis and in particular to the paper ["Classification of audio signals using statistical features on time and wavelet transform domains." by Lambrou et al.](references/papers/ic982120.pdf) to create a set of meaningul scalar features that could represent the Raman spectrograms for clustering purposes.
+This achieved a good representative power and was performing well enough to be presented in this report. In fact, *inference results*
+
+Another approach I used to normalize the dimensionality of the data is polynomial interpolation. Thus, I fiitted a *n*-order polynomial to the data and clustered the samples based on the set of coefficient for each polynomial. The results for this analysis are shown in the table below:
+*inference results*
+
+In order to associate labels to different clusters, I run the predictions on the labeled set and associated the labels corresponding to the particular cluster.
+Despite this not be the results I expected (there is not a 1 to 1 correspondance between clusters and labeled samples), the results are reported for the sake of evaluation.
+
+### Important notes
+From the EDA notebooks [1](notebooks/fp-eda-S1-raman-data.ipynb) [2](notebooks/fp-eda-S2-raman-data.ipynb) [3](notebooks/README-consegne.pynb), I noticed a big gap in integral values between labeled and unlabeled samples (which would have a big impact at inference time), thus I decided to normalise the area under the spectrogram in order to achieve comparable feature sets.
+
+## How to use the repo
+
+The project is based on a cookiecutter template. In particular, this enable you to reproduce results in a fairly simply way.
+
+Clone the repo with 
+
+`git clone https://github.com/fpaissan/raman_spectrograms_analysis.git`
+
+than enter the directory and follow the instructions below based on what you want to do.
+
+### Preprocess data
+Run `make data`.
+
+### Train k-means/k-medoids
+In the Makefile, change the argument at line *insert line* to chose one of the two methods, than run `make train`.
+
+### Predict abbundances in the data
+Run `make predict`.
+
+### In order to visualise abbundance of materials and possibly other interesting plots
+Have a look at the visualisations file and modify things if you want to have more insightful plots.
+For the plots presented in this report run `make visualization`.
 
 Project Organization
 ------------
@@ -59,7 +94,3 @@ Project Organization
     │
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 
-
---------
-
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
