@@ -1,4 +1,7 @@
 # Written by Francesco Paissan
+from src.models.train_model import train_model
+from src.features.utils import load_features
+
 import matplotlib.pyplot as plt
 import numpy as np
 import glob
@@ -53,3 +56,25 @@ def cluster_vis(interim_path: str, y_pred: np.array, notebook=False):
             plt.savefig(f"reports/figures/cluster{cluster + 1}_vis.pdf")
 
         plt.close()
+
+
+def inertia_analysis(feature_filepath: str, notebook=False):
+    """
+    Trains a set of k-means/k-medoids classifiers to study which is the best cluster count.
+    """
+    x = load_features(feature_filepath)
+
+    inertia = []
+    for nc in range(1, 100):
+        model = train_model(x, None, model_type="means")
+        inertia.append(model.inertia_)
+
+    plt.plot(range(1, 100), inertia)
+    plt.title("Clustering inertia")
+    plt.xlabel("number of clusters")
+    plt.ylabel("inertia")
+
+    if notebook:
+        plt.savefig(f"../reports/figures/inertia_analysis_vis.pdf")
+    else:
+        plt.savefig(f"reports/figures/inertia_analysis_vis.pdf")

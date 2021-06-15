@@ -1,5 +1,7 @@
 # Written by Francesco Paissan
 from scipy.spatial.distance import cosine, correlation
+from src.features.utils import load_features
+
 from sklearn_extra.cluster import KMedoids
 from sklearn.cluster import KMeans
 import numpy as np
@@ -7,8 +9,6 @@ import logging
 import pickle
 import click
 import glob
-
-from src.features.utils import load_features
 
 
 def train_model(data_x: str, metric: callable, n_clusters=61, model_type="medoids"):
@@ -29,7 +29,7 @@ def train_model(data_x: str, metric: callable, n_clusters=61, model_type="medoid
 
 @click.command()
 @click.argument('feature_filepath', type=click.Path(exists=True))
-@click.argument('model_type',  type=str)
+@click.argument('model_type', type=str)
 @click.argument('metric', type=str)
 def main(feature_filepath, model_type, metric):
     data_x = load_features(feature_filepath)
