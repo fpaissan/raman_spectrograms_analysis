@@ -1,4 +1,5 @@
 # Written by Francesco Paissan
+from src.features.n_degree_interp import n_ord_interp
 from src.features.utils import save_feat_files
 
 from scipy.signal import find_peaks
@@ -31,11 +32,16 @@ def stat_features(df, col_name):
         "skew": skew,
         "kurt": kurt,
         "entropy": signal_entropy,
-        "n-peaks": n_peaks,
+        # "n-peaks": n_peaks,
         "zero-cross": zero_crossings,
         "max_height": np.max(df[col_name]),
         "argmax_height": df.wl[np.argmax(df[col_name])],
-        "integral": np.trapz(df[col_name], x=df.wl)
+        # "integral": np.trapz(df[col_name], x=df.wl),
+        "pol_params_1": n_ord_interp(df.wl, df[col_name])[0],
+        "pol_params_2": n_ord_interp(df.wl, df[col_name])[1],
+        "pol_params_3": n_ord_interp(df.wl, df[col_name])[2],
+        "pol_params_4": n_ord_interp(df.wl, df[col_name])[3],
+        "pol_params_5": n_ord_interp(df.wl, df[col_name])[4]
     }
 
 
@@ -45,7 +51,7 @@ def extract_features(input_filepath: str, output_filepath: str):
     """
     file_list = glob.glob(input_filepath + '/*')
     file_list.sort()
-    features_set = np.ndarray(shape=(len(file_list), 10))
+    features_set = np.ndarray(shape=(len(file_list), 13))
     with ShadyBar(f"Extracting features {input_filepath}...", max=len(file_list)) as bar:
         for i, f in enumerate(file_list):
             interim_data = np.loadtxt(f, delimiter=',', skiprows=1)
@@ -59,7 +65,7 @@ def extract_features(input_filepath: str, output_filepath: str):
 
     zscore_feats = np.ndarray(shape=features_set.shape)
 
-    for i in range(7):
+    for i in range(8):
         zscore_feats[:, i] = zscore(features_set[:, i])
 
     save_feat_files(zscore_feats, os.path.join(output_filepath, "peaks_features.csv"))
