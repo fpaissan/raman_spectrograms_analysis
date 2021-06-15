@@ -14,6 +14,10 @@ After some experimentations and a bit of research I referred to the field of aud
 ### Important notes
 From the EDA notebooks \[[1](notebooks/fp-eda-S1-raman-data.ipynb)\] \[[2](notebooks/fp-eda-S2-raman-data.ipynb)\] \[[3](notebooks/README-consegne.pynb)\], I noticed a big gap in integral values between labeled and unlabeled samples (which is experimentally related to the duration of the acquisition), thus I decided to normalise the area under the spectrogram in order to achieve comparable feature sets.
 
+## Abundances prediction
+
+All the computations and reasoning is explained in the [notebook for material classification](notebooks/fp-material-classifier.ipynb). The basic idea is that every spectrogram is a linear combination of spectrograms in the labeled folder. Thus, we can predict the abundancies by finding the coefficients (constrained to by positive) and comparing them with each other.
+
 ## How to use the repo
 
 The project is based on a cookiecutter template. In particular, this enable you to reproduce results in a fairly simply way.
