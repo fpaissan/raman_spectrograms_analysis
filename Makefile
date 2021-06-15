@@ -20,7 +20,7 @@ endif
 # ALG SETUP                                                                     #
 #################################################################################
 
-FEATURE_SET = fit
+FEATURE_SET = clean
 
 MODEL_TYPE = means	# medoids for k-medoids
 METRIC = 2-norm	# metric for k-medoids between 2-norm, 1-norm, cosine distance, correlation

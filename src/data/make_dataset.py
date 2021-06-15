@@ -30,6 +30,7 @@ def make_unlabeled(input_filepath, output_filepath, norm_type="integral"):
 
 def make_labeled(input_filepath, output_filepath, norm_type="integral"):
     file_list = glob.glob(input_filepath + '/*')
+    print(input_filepath + '/*')
     with ShadyBar(f"Processing labeled files...", max=len(file_list)) as bar:
         for f in file_list:
             df = pd.read_csv(f, delim_whitespace=True, names=['wl', 'ri'])

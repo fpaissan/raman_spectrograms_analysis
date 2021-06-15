@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.features.peak_features import find_maxpeak_argmax, find_maxpeak_2d, gen_n_peak
+from src.features.n_degree_interp import fit_params, clean_spec
 from src.features.engineered_features import extract_features
-from src.features.n_degree_interp import fit_params
-
 from dotenv import find_dotenv, load_dotenv
 from pathlib import Path
 import logging
@@ -28,7 +27,8 @@ def main(features_path, output_filepath, type_feature):
         'maxpeak_n_argmax': gen_n_peak(10, "argmax"),
         'maxpeak_n_2d': gen_n_peak(5, "amp"),
         'eng': extract_features,
-        'fit': fit_params
+        'fit': fit_params,
+        'clean': clean_spec
     }
 
     for type in ['labeled', 'unlabeled']:

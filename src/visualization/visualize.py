@@ -13,7 +13,7 @@ from src.models.utils import load_model
 @click.command()
 @click.argument('features_filepath', type=click.Path(exists=True))
 def main(features_filepath):
-    model = load_model()
+    model = load_model("means")
 
     for type in ['unlabeled', 'labeled']:
         data_x = load_features(os.path.join(features_filepath, type))
