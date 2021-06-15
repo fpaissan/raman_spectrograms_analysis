@@ -54,8 +54,8 @@ def main(input_filepath, output_filepath):
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
 
-    make_unlabeled(os.path.join(input_filepath, "unlabeled"), os.path.join(output_filepath, "unlabeled"), "default")
-    make_labeled(os.path.join(input_filepath, "labeled"), os.path.join(output_filepath, "labeled"),  "default")
+    make_unlabeled(os.path.join(input_filepath, "unlabeled"), os.path.join(output_filepath, "unlabeled"), "integral")
+    make_labeled(os.path.join(input_filepath, "labeled"), os.path.join(output_filepath, "labeled"),  "integral")
 
 
 if __name__ == '__main__':

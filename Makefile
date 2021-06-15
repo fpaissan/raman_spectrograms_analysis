@@ -28,10 +28,10 @@ requirements: test_environment
 ## Make Dataset
 data: requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw/ data/interim/
-	$(PYTHON_INTERPRETER) src/features/build_features.py data/interim/ data/processed/ eng
+	$(PYTHON_INTERPRETER) src/features/build_features.py data/interim/ data/processed/ fit
 
 train: requirements
-	$(PYTHON_INTERPRETER) src/models/train_model.py data/processed/unlabeled 2-norm
+	$(PYTHON_INTERPRETER) src/models/train_model.py data/processed/labeled 2-norm
 
 predict: requirements
 	$(PYTHON_INTERPRETER) src/models/predict_model.py data/processed

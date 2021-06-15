@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.features.peak_features import find_maxpeak_argmax, find_maxpeak_2d, gen_n_peak
 from src.features.engineered_features import extract_features
+from src.features.n_degree_interp import fit_params
 
 from dotenv import find_dotenv, load_dotenv
 from pathlib import Path
@@ -19,14 +20,15 @@ def main(features_path, output_filepath, type_feature):
         cleaned data ready to be analyzed (saved in ../processed).
     """
     logger = logging.getLogger(__name__)
-    logger.info('making final data set from raw data')
+    logger.info('making final data set from normed data')
 
     feat_extractor = {
         'maxpeak_argmax': find_maxpeak_argmax,
         'maxpeak_2d': find_maxpeak_2d,
         'maxpeak_n_argmax': gen_n_peak(10, "argmax"),
         'maxpeak_n_2d': gen_n_peak(5, "amp"),
-        'eng': extract_features
+        'eng': extract_features,
+        'fit': fit_params
     }
 
     for type in ['labeled', 'unlabeled']:
