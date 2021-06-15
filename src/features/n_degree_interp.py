@@ -7,7 +7,7 @@ import glob
 import os
 
 
-def n_ord_interp(x, y, deg=4):
+def n_ord_interp(x, y, deg=7):
     """
     Returns parameters after deg-degree polynomial interpolation.
     """

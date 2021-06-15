@@ -1,7 +1,7 @@
 # Written by Francesco Paissan
 from scipy.spatial.distance import cosine, correlation
 from sklearn_extra.cluster import KMedoids
-from progress.bar import ShadyBar
+from sklearn.cluster import KMeans
 import numpy as np
 import logging
 import pickle
@@ -11,7 +11,7 @@ import glob
 from src.features.utils import load_features
 
 
-def train_model(data_x, metric, n_clusters=61):
+def train_model(data_x: str, metric: callable, n_clusters=61, model_type="medoids"):
     """ Train model_type on data_x using metric. """
     metrics_lambdas = {
         "1-norm": lambda x, y: np.linalg.norm(x - y, ord=1),
@@ -20,8 +20,10 @@ def train_model(data_x, metric, n_clusters=61):
         "correlation": lambda x, y: correlation(x, y),
     }
 
-    model = KMedoids(n_clusters=n_clusters, metric=metrics_lambdas[metric]).fit(data_x)
-
+    if model_type == "medoids":
+        model = KMedoids(n_clusters=n_clusters, metric=metrics_lambdas[metric]).fit(data_x)
+    elif model_type == "means":
+        model = KMeans(n_clusters=n_clusters).fit(data_x)
     return model
 
 
@@ -31,7 +33,7 @@ def train_model(data_x, metric, n_clusters=61):
 def main(feature_filepath, metric):
     data_x = load_features(feature_filepath)
 
-    model = train_model(data_x, metric, n_clusters=61)
+    model = train_model(data_x, metric, n_clusters=61, model_type="means")
 
     print(f"Model inertia on 61 clusters: {model.inertia_}")
 

@@ -31,7 +31,7 @@ data: requirements
 	$(PYTHON_INTERPRETER) src/features/build_features.py data/interim/ data/processed/ fit
 
 train: requirements
-	$(PYTHON_INTERPRETER) src/models/train_model.py data/processed/labeled 2-norm
+	$(PYTHON_INTERPRETER) src/models/train_model.py data/processed/unlabeled cosine
 
 predict: requirements
 	$(PYTHON_INTERPRETER) src/models/predict_model.py data/processed

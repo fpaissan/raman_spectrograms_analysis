@@ -10,7 +10,7 @@ def load_data(path: str) -> np.ndarray:
     return np.loadtxt(path)
 
 def load_model():
-    data_x = load_features("data/processed/labeled")
-    model = train_model(data_x, "2-norm", n_clusters=61)
+    data_x = load_features("data/processed/unlabeled")
+    model = train_model(data_x, "1-norm", n_clusters=61, model_type="means")
 
     return model
